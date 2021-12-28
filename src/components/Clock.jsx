@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useState,useEffect} from "react";
 import formatDate from "../function/formatDate";
 
 export default ()=>{
@@ -8,6 +8,11 @@ export default ()=>{
         1000
     )
 
+    useEffect(() => {
+        return () => {
+            clearInterval(timerID)
+        };
+    }, [clock]);
     return (
         <time dateTime={ clock }>
             { formatDate( clock ) }

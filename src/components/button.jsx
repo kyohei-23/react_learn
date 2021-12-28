@@ -9,7 +9,7 @@ export default function(){
     }, [clicked]);
     return (
         <label>
-            { clicked ? '通常' : 'ダーク' }モードに変更
+            ダークモード
             <button 
                 className={`toggle-btn ${clicked ? 'active' : ''}`}
                 onClick={()=>setClicked( !clicked)  }

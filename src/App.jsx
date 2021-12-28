@@ -14,8 +14,9 @@ function App() {
   const hoge = <h1>Hello,world!{ count }</h1>
   return (
     <>
-      {/* { hoge }
+      {/* { hoge } */}
       <Button /><br/>
+      {/* 
       <Clock />
       <Hello name="hoge" />
       <Hello name="huga" />
