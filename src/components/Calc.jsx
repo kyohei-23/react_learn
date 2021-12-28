@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
 
-function CalcButton({ number, onClick }){
+function CalcButton({ value, onClick }){
     return(
         <button onClick={ ()=> onClick() }>
-            { number }
+            { value }
         </button>
     )
 }
 
 function calc(a, b, operator){
+    if(!(a || operator)) return b
     switch(operator){
         case '+' :
             return a+b
@@ -17,42 +18,39 @@ function calc(a, b, operator){
         case '*' :
             return a*b
         case '/' :
-            return a/b
+            if(a && b){
+                return a/b
+            }else if(!(a || b)){
+                window.alert('結果が定義されていません')
+                return 0
+            }else if(b === 0){
+                window.alert('0で割ることはできません。')
+                return  0
+            }else{
+                return b
+            }
+            
         default : 
             break;
     }
 }
 
-export function CalcBoard(){
-    const [result, setResult] = useState(0);
-    const [operator, setOperator] = useState('');
-    const [oldNum, setOldNum] = useState(0);
-    const [total, setTotal] = useState(0);
-
-    const handleClick = ( i ) =>{
-        if( typeof(i) === 'number' ){
-            setResult( result * 10 + i )
-        }else if(i !== '='){
-            setOldNum( result )
-            setResult( 0 )
-            setOperator( i )
-        }else{
-            let _total = calc(oldNum, result, operator)
-            setTotal(_total)
-        }
+function CalcButtons({current ,setCurrent}){
+    
+    const handleClick =( i ) =>{
+        setCurrent( current* 10 + i )
     }
 
     const renderSquare =( i )=>{
         return (
             <CalcButton 
-                number={ i }
+                value={ i }
                 onClick={()=> handleClick( i ) }
             />
         )
     }
     return (
         <>
-            <p>{ oldNum + operator + result + '=' + total }</p>
             { renderSquare(1) }
             { renderSquare(2) }
             { renderSquare(3) }
@@ -62,11 +60,69 @@ export function CalcBoard(){
             { renderSquare(7) }
             { renderSquare(8) }
             { renderSquare(9) }
-            { renderSquare('+') }
-            { renderSquare('-') }
-            { renderSquare('*') }
-            { renderSquare('/') }
-            { renderSquare('=') }
+            { renderSquare(0) }
+        </>
+    )
+}
+
+
+function OperatorButtons({setOperator}){
+
+    const handleClick = ( str )=>{
+        setOperator(str)
+    }
+
+    const renderSquare =( str )=>{
+        return (
+            <CalcButton 
+                value={ str }
+                onClick={()=> handleClick( str ) }
+            />
+        )
+    }
+    return(
+        <>
+            {renderSquare('+')}
+            {renderSquare('-')}
+            {renderSquare('*')}
+            {renderSquare('/')}
+        </>
+    )
+}
+
+export function CalcBoard(){
+    const [current, setCurrent] = useState(0);
+    const [operator, setOperator] = useState('');
+    const [oldNum, setOldNum] = useState(0);
+    const [results, setResults ] = useState([]);
+    
+    useEffect(() => {
+        current && setOldNum(current)
+        setCurrent(0)
+    }, [ operator ]);
+    
+    const calcResult =()=>{
+        let _result = calc(oldNum, current, operator)
+        setResults([...results, _result])
+        setOldNum(_result)
+        setCurrent(0)
+    }
+    return(
+        <>
+            <ul>{ results.map(num=><li key={num} onClick={()=> setOldNum(num) }>{ num }</li>) }</ul>
+            <span>{oldNum}</span>
+            <p>{ operator+current }</p>
+            <CalcButtons
+                current = { current }
+                setCurrent = { setCurrent }
+            />
+            <OperatorButtons
+                setOperator = { setOperator }
+            />
+            <CalcButton
+                value="="
+                onClick={calcResult}
+            />
         </>
     )
 }
