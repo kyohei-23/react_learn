@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
-import logo from './logo.svg'
+import { useState } from 'react'
 import './App.css'
 import Button from './components/button';
+import { CalcBoard } from './components/Calc';
 import Clock from './components/Clock';
 
 function Hello({ name }){
@@ -15,7 +15,7 @@ function App() {
   return (
     <>
       { hoge }
-      <Button />
+      <Button /><br/>
       <Clock />
       <Hello name="hoge" />
       <Hello name="huga" />
@@ -24,6 +24,7 @@ function App() {
       >
         incliment
       </button>
+      <CalcBoard />
     </>
   )
 }
