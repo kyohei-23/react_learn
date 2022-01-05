@@ -162,7 +162,7 @@ export function CalcBoard(){
 
     return (
         <div className="calcurator flex flex-col h-screen">
-            <div className="log-wrapper basis-8/12 px-10 mt-10 flex overflow-y-scroll">
+            <div className="log-wrapper basis-8/12 px-10 mt-10 flex overflow-y-auto">
                 <ul className="log-inner w-full mt-auto mb-0 flex flex-col justify-end">
                     { resultItems }
                 </ul>
